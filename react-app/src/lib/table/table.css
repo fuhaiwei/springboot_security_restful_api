@@ -1,0 +1,15 @@
+.table-root .table-title {
+  font-size: 24px;
+  padding: 12px;
+}
+
+@media screen and (max-width: 500px) {
+  .table-root .table > thead > tr > th,
+  .table-root .table > tbody > tr > th,
+  .table-root .table > tfoot > tr > th,
+  .table-root .table > thead > tr > td,
+  .table-root .table > tbody > tr > td,
+  .table-root .table > tfoot > tr > td {
+    padding: 5px;
+  }
+}

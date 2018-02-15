@@ -1,0 +1,54 @@
+<configuration scan="true" scanPeriod="10 seconds">
+
+    <appender name="WEB" class="ch.qos.logback.core.FileAppender">
+        <file>target/webapp.log</file>
+        <append>false</append>
+        <encoder>
+            <pattern>
+                [ %-5level] [%date{yyyy-MM-dd HH:mm:ss}] %logger{96} [%line] - %msg%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <appender name="STD" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                [ %-5level] [%date{yyyy-MM-dd HH:mm:ss}] %logger{96} [%line] - %msg%n
+            </pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+    </appender>
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder>
+            <pattern>
+                [ %-5level] [%date{yyyy-MM-dd HH:mm:ss}] %logger{96} [%line] - %msg%n
+            </pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>record/server-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxFileSize>20MB</maxFileSize>
+            <maxHistory>60</maxHistory>
+            <totalSizeCap>2GB</totalSizeCap>
+        </rollingPolicy>
+
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+        <prudent>true</prudent>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="WEB"/>
+        <appender-ref ref="STD"/>
+        <appender-ref ref="FILE"/>
+    </root>
+
+    <logger name="org.springframework" level="WARN"/>
+
+</configuration>
