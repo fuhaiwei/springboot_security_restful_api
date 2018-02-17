@@ -5,6 +5,7 @@ import demo.action.BaseController;
 import demo.action.SessionController;
 import demo.security.CustomAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -24,10 +25,13 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.csrf.CsrfFilter;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 
+import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Locale;
 
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -55,21 +59,23 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/basic/**").hasRole("BASIC")
                 .antMatchers("/api/session").permitAll()
                 .antMatchers(HttpMethod.GET).permitAll()
-                .antMatchers("/api/**").hasRole("BASIC")
-                .and()
-                .formLogin()
-                .and()
-                .logout()
+                .antMatchers("/api/**").hasRole("BASIC");
+
+        http.formLogin();
+
+        http.logout()
                 .logoutUrl("/api/session/logout")
                 .addLogoutHandler(customLogoutHandler)
-                .logoutSuccessHandler(customLogoutHandler)
-                .and()
-                .exceptionHandling()
+                .logoutSuccessHandler(customLogoutHandler);
+
+        http.exceptionHandling()
                 .accessDeniedHandler(customAccessDeniedHandler)
                 .authenticationEntryPoint(customAccessDeniedHandler);
 
         http.csrf()
                 .ignoringAntMatchers("/api/session/**");
+
+        http.addFilterBefore(new AcceptHeaderLocaleFilter(), UsernamePasswordAuthenticationFilter.class);
 
         http.addFilterAt(customAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
@@ -136,4 +142,28 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         }
     }
 
+    private static class AcceptHeaderLocaleFilter implements Filter {
+        private AcceptHeaderLocaleResolver localeResolver;
+
+        private AcceptHeaderLocaleFilter() {
+            localeResolver = new AcceptHeaderLocaleResolver();
+            localeResolver.setDefaultLocale(Locale.US);
+        }
+
+        @Override
+        public void init(FilterConfig filterConfig) {
+        }
+
+        @Override
+        public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+            Locale locale = localeResolver.resolveLocale((HttpServletRequest) request);
+            LocaleContextHolder.setLocale(locale);
+
+            chain.doFilter(request, response);
+        }
+
+        @Override
+        public void destroy() {
+        }
+    }
 }
