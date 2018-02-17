@@ -7,6 +7,7 @@ import demo.security.CustomAuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -31,6 +32,7 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 
 @EnableWebSecurity
@@ -91,20 +93,26 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         return filter;
     }
 
+    private static void responseText(HttpServletResponse response, String content) throws IOException {
+        response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+        byte[] bytes = content.getBytes(StandardCharsets.UTF_8);
+        response.setContentLength(bytes.length);
+        response.getOutputStream().write(bytes);
+        response.flushBuffer();
+    }
+
     @Component
     public static class CustomAccessDeniedHandler extends BaseController implements AuthenticationEntryPoint, AccessDeniedHandler {
         // NoLogged Access Denied
         @Override
         public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
-            response.getWriter().write(errorMessage(authException.getMessage()));
-            response.flushBuffer();
+            responseText(response, errorMessage(authException.getMessage()));
         }
 
         // Logged Access Denied
         @Override
         public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException {
-            response.getWriter().write(errorMessage(accessDeniedException.getMessage()));
-            response.flushBuffer();
+            responseText(response, errorMessage(accessDeniedException.getMessage()));
         }
     }
 
@@ -114,15 +122,13 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         @Override
         public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
             LOGGER.info("User login successfully, name={}", authentication.getName());
-            response.getWriter().write(objectResult(SessionController.getJSON(authentication)));
-            response.flushBuffer();
+            responseText(response, objectResult(SessionController.getJSON(authentication)));
         }
 
         // Login Failure
         @Override
         public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException {
-            response.getWriter().write(errorMessage(exception.getMessage()));
-            response.flushBuffer();
+            responseText(response, errorMessage(exception.getMessage()));
         }
     }
 
@@ -137,8 +143,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         // After Logout
         @Override
         public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
-            response.getWriter().write(objectResult(SessionController.getJSON(null)));
-            response.flushBuffer();
+            responseText(response, objectResult(SessionController.getJSON(null)));
         }
     }
 
