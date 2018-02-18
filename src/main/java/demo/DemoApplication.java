@@ -63,7 +63,12 @@ public class DemoApplication {
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
         messageSource.setBasename("classpath:org/springframework/security/messages");
-        return messageSource;
+
+        ReloadableResourceBundleMessageSource messageSourceLocal = new ReloadableResourceBundleMessageSource();
+        messageSourceLocal.setBasename("classpath:messages");
+        messageSourceLocal.setParentMessageSource(messageSource);
+
+        return messageSourceLocal;
     }
 
 }
