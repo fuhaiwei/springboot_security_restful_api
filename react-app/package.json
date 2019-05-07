@@ -4,11 +4,11 @@
   "private": true,
   "proxy": "http://localhost:8080",
   "dependencies": {
-    "antd": "^3.2.1",
+    "antd": "^3.17.0",
     "md5": "^2.2.1",
-    "react": "^16.2.0",
-    "react-dom": "^16.2.0",
-    "react-scripts": "1.1.1"
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
+    "react-scripts": "^2.1.8"
   },
   "scripts": {
     "start": "react-app-rewired start",
@@ -17,7 +17,14 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "babel-plugin-import": "^1.6.4",
-    "react-app-rewired": "^1.4.1"
-  }
+    "babel-plugin-import": "^1.11.0",
+    "customize-cra": "^0.2.12",
+    "react-app-rewired": "^2.1.3"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
