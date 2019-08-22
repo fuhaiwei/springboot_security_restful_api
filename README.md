@@ -13,6 +13,7 @@ $ mvn clean compile spring-boot:run
 RUN UI:
 ```bash
 $ cd react-app
+$ yarn
 $ yarn start
 ```
 
