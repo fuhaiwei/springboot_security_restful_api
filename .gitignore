@@ -7,3 +7,8 @@ hs_err_pid*
 # Intellij IDEA
 .idea
 *.iml
+
+# vscode
+.classpath
+.project
+.settings
