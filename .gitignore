@@ -1,14 +1,32 @@
-# Project Files
-target
-record
-*.log
-hs_err_pid*
+HELP.md
+target/
+record/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**
+!**/src/test/**
 
-# Intellij IDEA
-.idea
-*.iml
-
-# vscode
+### STS ###
+.apt_generated
 .classpath
+.factorypath
 .project
 .settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+
+### VS Code ###
+.vscode/

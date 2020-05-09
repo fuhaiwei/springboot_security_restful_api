@@ -1,5 +1,7 @@
-INSTALL:
+# springboot_security_restful_api
+SpringBoot + SpringSecurity + RESTful API --- Maven Project Demo
 
+INSTALL:
 ```bash
 $ git clone https://github.com/fuhaiwei/springboot_security_restful_api.git
 ```

@@ -2,6 +2,7 @@ package demo.support;
 
 import demo.model.User;
 
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.util.Objects;
 
@@ -21,7 +22,7 @@ public abstract class PassUtil {
     private static String md5(String text) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] bytes = md.digest(text.getBytes("utf-8"));
+            byte[] bytes = md.digest(text.getBytes(StandardCharsets.UTF_8));
             return toHex(bytes);
         } catch (Exception e) {
             throw new RuntimeException(e);

@@ -36,7 +36,7 @@ public class UserController extends BaseController {
     public String saveAdminUser(
             @JsonArg("$.username") String username,
             @JsonArg("$.password") String password) {
-        if (userRepository.findByUsername(username) != null) {
+        if (userRepository.findByUsername(username).isPresent()) {
             return errorMessage("Username already exists");
         }
         User user = new User(username, password);

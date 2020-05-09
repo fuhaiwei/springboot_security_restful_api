@@ -1,30 +1,24 @@
 package demo.support;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.persistence.*;
+import java.io.Serializable;
 
+@Setter
+@Getter
 @MappedSuperclass
-public abstract class BaseModel {
+public abstract class BaseModel implements Serializable {
 
-    private Long id;
-    private Long version;
+    private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
+    private Long id;
 
     @Version
-    public Long getVersion() {
-        return version;
-    }
-
-    public void setVersion(Long version) {
-        this.version = version;
-    }
+    @NotGson
+    private Long version;
 
 }

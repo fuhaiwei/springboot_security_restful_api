@@ -42,8 +42,8 @@ public class SessionController extends BaseController {
     private static JSONArray getUserRoles(Authentication authentication) {
         JSONArray userRoles = new JSONArray();
         authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .forEach(userRoles::put);
+            .map(GrantedAuthority::getAuthority)
+            .forEach(userRoles::put);
         return userRoles;
     }
 

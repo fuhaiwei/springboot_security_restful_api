@@ -17,6 +17,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -52,30 +53,39 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     private CustomAccessDeniedHandler customAccessDeniedHandler;
 
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService);
+        auth.userDetailsService(userDetailsService)
+            .passwordEncoder(new PasswordEncoder() {
+                public String encode(CharSequence rawPassword) {
+                    return rawPassword.toString();
+                }
+
+                public boolean matches(CharSequence rawPassword, String encodedPassword) {
+                    return rawPassword.toString().equals(encodedPassword);
+                }
+            });
     }
 
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/api/admin/**").hasRole("ADMIN")
-                .antMatchers("/api/basic/**").hasRole("BASIC")
-                .antMatchers("/api/session").permitAll()
-                .antMatchers(HttpMethod.GET).permitAll()
-                .antMatchers("/api/**").hasRole("BASIC");
+            .antMatchers("/api/admin/**").hasRole("ADMIN")
+            .antMatchers("/api/basic/**").hasRole("BASIC")
+            .antMatchers("/api/session").permitAll()
+            .antMatchers(HttpMethod.GET).permitAll()
+            .antMatchers("/api/**").hasRole("BASIC");
 
         http.formLogin();
 
         http.logout()
-                .logoutUrl("/api/session/logout")
-                .addLogoutHandler(customLogoutHandler)
-                .logoutSuccessHandler(customLogoutHandler);
+            .logoutUrl("/api/session/logout")
+            .addLogoutHandler(customLogoutHandler)
+            .logoutSuccessHandler(customLogoutHandler);
 
         http.exceptionHandling()
-                .accessDeniedHandler(customAccessDeniedHandler)
-                .authenticationEntryPoint(customAccessDeniedHandler);
+            .accessDeniedHandler(customAccessDeniedHandler)
+            .authenticationEntryPoint(customAccessDeniedHandler);
 
         http.csrf()
-                .ignoringAntMatchers("/api/session/**");
+            .ignoringAntMatchers("/api/session/**");
 
         http.addFilterBefore(new AcceptHeaderLocaleFilter(), UsernamePasswordAuthenticationFilter.class);
 
@@ -94,7 +104,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     private static void responseText(HttpServletResponse response, String content) throws IOException {
-        response.setContentType(MediaType.APPLICATION_JSON_UTF8_VALUE);
+        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         byte[] bytes = content.getBytes(StandardCharsets.UTF_8);
         response.setContentLength(bytes.length);
         response.getOutputStream().write(bytes);
@@ -171,4 +181,5 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         public void destroy() {
         }
     }
+
 }
