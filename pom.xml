@@ -5,7 +5,7 @@
 
     <groupId>fuhaiwei</groupId>
     <artifactId>springboot_security_restful_api</artifactId>
-    <version>0.0.1</version>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
     <parent>
