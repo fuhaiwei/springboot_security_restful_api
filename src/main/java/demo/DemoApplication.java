@@ -20,7 +20,7 @@ public class DemoApplication {
 
     public static void main(String[] args) {
         ConfigurableApplicationContext context =
-                SpringApplication.run(DemoApplication.class, args);
+            SpringApplication.run(DemoApplication.class, args);
         UserRepository userRepository = context.getBean(UserRepository.class);
         AuthorityRepository authorityRepository = context.getBean(AuthorityRepository.class);
 
@@ -45,21 +45,10 @@ public class DemoApplication {
     }
 
     private static Authority getOrGreateAuthority(String authorityText, AuthorityRepository repository) {
-        Authority authority = repository.findByAuthority(authorityText);
-        if (authority == null) {
-            authority = new Authority(authorityText);
-            repository.save(authority);
-        }
-        return authority;
+        return repository.findByAuthority(authorityText)
+            .orElseGet(() -> repository.save(new Authority(authorityText)));
     }
 
-    @Bean
-    @SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
-    public SessionFactory sessionFactory(EntityManagerFactory emf) {
-        return emf.unwrap(SessionFactory.class);
-    }
-
-    @Bean
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
         messageSource.setBasename("classpath:org/springframework/security/messages");

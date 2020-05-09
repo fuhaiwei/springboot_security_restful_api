@@ -23,8 +23,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
             String password = context.read("$.password", String.class);
             authRequest = new UsernamePasswordAuthenticationToken(username, password);
         } catch (IOException e) {
-            e.printStackTrace();
-            authRequest = new UsernamePasswordAuthenticationToken("", "");
+            throw new RuntimeException(e);
         }
         setDetails(request, authRequest);
         return this.getAuthenticationManager().authenticate(authRequest);

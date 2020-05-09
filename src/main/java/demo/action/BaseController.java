@@ -7,7 +7,7 @@ import org.springframework.http.MediaType;
 
 public class BaseController {
 
-    protected static final String MEDIA_TYPE = MediaType.APPLICATION_JSON_UTF8_VALUE;
+    protected static final String MEDIA_TYPE = MediaType.APPLICATION_JSON_VALUE;
     protected Logger LOGGER;
 
     public BaseController() {
