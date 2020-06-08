@@ -87,7 +87,7 @@ export default function Login({ onQuery, session }) {
       <div style={{ padding: 10 }}>
         <h3>There are two default users here</h3>
         <h3>Admin Role User: name is admin and pass is 123456</h3>
-        <h3>Basic Role User: pass is test and pass is test</h3>
+        <h3>Basic Role User: name is test and pass is test</h3>
       </div>
     </div>
   )
