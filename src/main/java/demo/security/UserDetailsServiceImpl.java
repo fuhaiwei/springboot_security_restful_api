@@ -16,6 +16,7 @@ public class UserDetailsServiceImpl implements UserDetailsService, Serializable 
     @Autowired
     private UserRepository userRepository;
 
+    @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByUsername(username)
