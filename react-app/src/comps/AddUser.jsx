@@ -33,18 +33,20 @@ export default function AddUser() {
       <div style={{ padding: 20 }}>
         <h3>Only administrators can add user</h3>
       </div>
-      <div style={{ padding: 10 }}>
+      <div style={{ padding: 10, maxWidth: 500, margin: '0 auto' }}>
         <Input
           id="add-username"
+          maxLength={20}
           prefix={<UserOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
           placeholder="Please enter username"
           onPressEnter={() => document.querySelector('#add-password').focus()}
         />
       </div>
-      <div style={{ padding: 10 }}>
+      <div style={{ padding: 10, maxWidth: 500, margin: '0 auto' }}>
         <Input
           id="add-password"
           type="password"
+          maxLength={20}
           prefix={<KeyOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
           placeholder="Please enter password"
           onPressEnter={addUser}

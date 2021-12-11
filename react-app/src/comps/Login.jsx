@@ -64,7 +64,7 @@ export default function Login({ onQuery, session }) {
 
   return (
     <div>
-      <div style={{ padding: 10 }}>
+      <div style={{ padding: 10, maxWidth: 500, margin: '0 auto' }}>
         <Input
           id="login-username"
           prefix={<UserOutlined style={{ color: 'rgba(0,0,0,.25)' }} />}
@@ -72,7 +72,7 @@ export default function Login({ onQuery, session }) {
           onPressEnter={() => document.querySelector('#login-password').focus()}
         />
       </div>
-      <div style={{ padding: 10 }}>
+      <div style={{ padding: 10, maxWidth: 500, margin: '0 auto' }}>
         <Input
           id="login-password"
           type="password"
@@ -86,8 +86,8 @@ export default function Login({ onQuery, session }) {
       </div>
       <div style={{ padding: 10 }}>
         <h3>There are two default users here</h3>
-        <h3>Admin Role User: name is admin and pass is 123456</h3>
-        <h3>Basic Role User: name is test and pass is test</h3>
+        <h3>Admin User: name is <b>admin</b> and pass is <b>admin</b></h3>
+        <h3>Basic User: name is <b>user</b> and pass is <b>user</b></h3>
       </div>
     </div>
   )
