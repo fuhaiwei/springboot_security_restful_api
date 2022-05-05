@@ -1,7 +1,10 @@
+import session from '#F/session/slice'
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 
 export const store = configureStore({
-  reducer: {},
+  reducer: {
+    session,
+  },
 })
 
 export const dispatch = store.dispatch
