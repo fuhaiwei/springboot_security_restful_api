@@ -42,7 +42,7 @@ public class SessionController extends BaseController {
                 });
             }
         }
-        return buildSessionAndCount();
+        return buildSession();
     }
 
     private boolean isLogged(Authentication authentication) {
@@ -81,7 +81,7 @@ public class SessionController extends BaseController {
             return errorResult("user is disabled");
         }
         onSessionLogin(user, true);
-        return buildSessionAndCount();
+        return buildSession();
     }
 
     @Transactional
@@ -91,16 +91,15 @@ public class SessionController extends BaseController {
         sessionService.cleanSession(sessionId);
         setSessionTokenToHeader("");
         setAuthentication(buildGuestAuthentication());
-        return buildSessionAndCount();
+        return buildSession();
     }
 
-    private String buildSessionAndCount() {
-        Long count = sessionService.countSession();
+    private String buildSession() {
         Optional<Authentication> optional = getAuthentication();
         if (optional.isPresent()) {
-            return dataResult(new SessionAndCount(optional.get(), count));
+            return dataResult(new Session(optional.get()));
         } else {
-            return dataResult(new SessionAndCount(buildGuestAuthentication(), count));
+            return dataResult(new Session(buildGuestAuthentication()));
         }
     }
 

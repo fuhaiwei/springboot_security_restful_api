@@ -10,18 +10,16 @@ import java.util.stream.Collectors;
 @Getter
 @Setter
 @NoArgsConstructor
-public class SessionAndCount {
+public class Session {
 
     private String userName;
-    private Set<String> userRoles;
-    private long userCount;
     private boolean hasBasic;
     private boolean hasAdmin;
+    private Set<String> userRoles;
 
-    public SessionAndCount(Authentication authentication, long userCount) {
+    public Session(Authentication authentication) {
         this.userName = authentication.getName();
         this.userRoles = getUserRoles(authentication);
-        this.userCount = userCount;
         this.hasBasic = userRoles.contains("ROLE_BASIC");
         this.hasAdmin = userRoles.contains("ROLE_ADMIN");
     }

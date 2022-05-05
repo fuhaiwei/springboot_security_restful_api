@@ -1,8 +1,6 @@
 package com.mingzuozhibi.modules.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,9 +13,6 @@ import static com.mingzuozhibi.modules.user.SessionUtils.setSessionTokenToHeader
 
 @Service
 public class SessionService {
-
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
 
     @Autowired
     private RememberRepository rememberRepository;
@@ -56,18 +51,6 @@ public class SessionService {
     public void cleanSession(Long sessionId) {
         if (sessionId != null) {
             rememberRepository.deleteById(sessionId);
-        }
-    }
-
-    @Transactional
-    public Long countSession() {
-        String sql = "SELECT COUNT(*) FROM SPRING_SESSION";
-        try {
-            return jdbcTemplate.query(sql, rs -> rs.next() ? rs.getLong(1) : -1L);
-        } catch (DataAccessException e) {
-            return -2L;
-        } catch (RuntimeException e) {
-            return -3L;
         }
     }
 
