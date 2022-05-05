@@ -1,9 +1,14 @@
+### My Project ###
+*.log
+/var/
+/etc/app.properties
+
+### Spring Boot ###
 HELP.md
 target/
-record/
 !.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**
-!**/src/test/**
+!**/src/main/**/target/
+!**/src/test/**/target/
 
 ### STS ###
 .apt_generated
@@ -27,6 +32,8 @@ record/
 /nbdist/
 /.nb-gradle/
 build/
+!**/src/main/**/build/
+!**/src/test/**/build/
 
 ### VS Code ###
 .vscode/
