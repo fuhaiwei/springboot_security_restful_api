@@ -21,7 +21,7 @@ export function Profile() {
           ))}
         </Card>
         {!session.hasBasic ? (
-          <Card title="Logout From" style={{ width: 320 }}>
+          <Card title="Login From" style={{ width: 320 }}>
             <Login />
           </Card>
         ) : (

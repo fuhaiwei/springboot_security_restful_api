@@ -1,3 +1,5 @@
+import { message, Modal } from 'antd'
+
 export interface Result<Data> {
   success: boolean
   message?: string
@@ -11,34 +13,55 @@ export interface Page {
   totalElements: number
 }
 
-export function fetchResult<T>(input: RequestInfo, init: RequestInit = {}) {
+interface Props {
+  successText?: string
+  failureText?: string
+  failureName?: string
+}
+
+export function fetchResult<T>(input: RequestInfo, init: RequestInit & Props = {}) {
   const headers = new Headers(init.headers)
   loadCsrfToken(headers)
   setContentType(headers, init.body != null)
   setCredentials(init)
   init.headers = headers
-  return fetch(input, init).then((response) => {
-    if (!response.ok) {
-      return Promise.reject({
-        name: `HTTP ${response.status}`,
-        message: response.statusText,
-      })
-    }
-    saveCsrfToken(response.headers)
-    saveSessionToken(response.headers)
-    return response.json().then(
-      (result: Result<T>) => {
-        if (!result.success) {
-          return Promise.reject({ name: 'Request Failed', message: result.message })
-        } else {
-          return Promise.resolve(result)
-        }
-      },
-      (error: any) => {
-        return Promise.reject({ name: 'Json Parse Error', message: error.message })
+  return fetch(input, init)
+    .then((response) => {
+      if (!response.ok) {
+        return Promise.reject({
+          name: `HTTP ${response.status}`,
+          message: response.statusText,
+        })
       }
-    )
-  })
+      saveCsrfToken(response.headers)
+      saveSessionToken(response.headers)
+      return response.json().then(
+        (result: Result<T>) => {
+          if (!result.success) {
+            return Promise.reject({ name: 'Request Failed', message: result.message })
+          } else {
+            if (init.successText) {
+              message.success(init.successText)
+            }
+            return Promise.resolve(result)
+          }
+        },
+        (error) => {
+          return Promise.reject({ name: 'Json Parse Error', message: error.message })
+        }
+      )
+    })
+    .catch((error) => {
+      if (init.failureName) {
+        if (error.name === 'Request Failed') {
+          error.name = init.failureName
+        }
+        Modal.error({ title: error.name, content: error.message })
+      } else if (init.failureText) {
+        message.error(init.failureText)
+      }
+      return Promise.reject(error)
+    })
 }
 
 function setCredentials(init: RequestInit) {

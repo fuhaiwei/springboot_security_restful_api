@@ -52,8 +52,7 @@ public class UserController extends BaseController {
     }
 
     @Transactional
-    @PreAuthorize("hasRole('ADMIN')")
-    @PostMapping(value = "/api/users", produces = MEDIA_TYPE)
+    @PostMapping(value = "/api/register", produces = MEDIA_TYPE)
     public String createUser(@RequestBody EntityForm form) {
         Optional<String> checks = runChecks(
             checkNotEmpty(form.username, "username"),
@@ -64,6 +63,8 @@ public class UserController extends BaseController {
         if (checks.isPresent()) {
             return errorResult(checks.get());
         }
+        if (form.enabled == null) form.enabled = Boolean.TRUE;
+
         if (userRepository.existsByUsername(form.username)) {
             return paramExists("username");
         }

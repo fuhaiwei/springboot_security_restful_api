@@ -1,12 +1,21 @@
 import { dispatch } from '#A/store'
 import { encodePassword } from '#A/utils'
 import { sessionLogin } from '#F/session/slice'
-import { Button, Form, Input, Modal } from 'antd'
+import { Button, Form, Input, Modal, Space } from 'antd'
+import { useState } from 'react'
+import { postRegister } from './service'
 
 export function Login() {
+  const [onLogin, setOnLogin] = useState(true)
+
   const onFinish = (values: any) => {
     const encode = encodePassword(values.username, values.password)
-    dispatch(sessionLogin({ ...values, password: encode }))
+    const form = { ...values, password: encode }
+    if (onLogin) {
+      dispatch(sessionLogin(form))
+    } else {
+      postRegister(form)
+    }
   }
 
   const onFinishFailed = () => {
@@ -40,10 +49,20 @@ export function Login() {
           <Input.Password />
         </Form.Item>
 
-        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
+        <Form.Item wrapperCol={{ span: 16 }}>
+          <Space size="large">
+            <Button type="primary" htmlType="submit">
+              {onLogin ? 'Login' : 'Register'}
+            </Button>
+            <Button
+              type="link"
+              onClick={() => {
+                setOnLogin(!onLogin)
+              }}
+            >
+              {onLogin ? 'toRegister' : 'toLogin'}
+            </Button>
+          </Space>
         </Form.Item>
       </Form>
     </div>

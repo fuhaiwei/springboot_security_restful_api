@@ -1,6 +1,6 @@
 import { fetchResult } from '#H/UseResult'
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import { message, Modal } from 'antd'
+import { message } from 'antd'
 
 interface SessionState {
   userName: string
@@ -33,6 +33,7 @@ export const sessionLogin = createAsyncThunk('session/login', async (from: Login
   const result = await fetchResult<SessionState>('/api/session', {
     method: 'POST',
     body: JSON.stringify(from),
+    failureName: 'Login Failid',
   })
   return result.data
 })
@@ -55,18 +56,10 @@ export const sessionSlice = createSlice({
       }
       return action.payload
     },
-    sessionReject(_, action: any) {
-      const { name, message } = action.error
-      Modal.error({ title: name, content: message })
-    },
   },
   extraReducers: (builder) => {
     builder.addCase(sessionQuery.fulfilled, sessionSlice.caseReducers.sessionUpdate)
-    builder.addCase(sessionQuery.rejected, sessionSlice.caseReducers.sessionReject)
-
     builder.addCase(sessionLogin.fulfilled, sessionSlice.caseReducers.sessionUpdate)
-    builder.addCase(sessionLogin.rejected, sessionSlice.caseReducers.sessionReject)
-
     builder.addCase(sessionLogout.fulfilled, () => initialState)
     builder.addCase(sessionLogout.rejected, () => initialState)
   },
