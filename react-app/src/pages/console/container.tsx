@@ -2,7 +2,7 @@ import { useNav } from '#A/hooks'
 import { MyCheckbox } from '#C/checkbox/Checkbox'
 import { MyHeader } from '#C/header/Header'
 import { MyPagination } from '#C/pagination/Pagination'
-import useUrlState from '@ahooksjs/use-url-state'
+import { useSerach } from '#H/useSearch'
 import { useRequest } from 'ahooks'
 import { Radio, Table } from 'antd'
 import Column from 'antd/lib/table/Column'
@@ -12,19 +12,10 @@ import { allNames, allTypes, findAll, Message, Name, Search } from './service'
 
 const typeOptions = allTypes.map((e) => ({ label: e, value: e }))
 
-function fromArray(array: string[]) {
-  if (typeof array === 'string') {
-    return [array]
-  } else {
-    return array ?? []
-  }
-}
-
 export function Console() {
   const { navigate } = useNav()
   const { name = 'SERVER_CORE' } = useParams<{ name: Name }>()
-  const [search, setSearch] = useUrlState<Search>()
-  search.types = fromArray(search.types)
+  const [search, setSearch] = useSerach<Search>(undefined, { arrayNames: ['types'] })
   const { data, ...state } = useRequest(() => findAll(name, search), {
     refreshDeps: [name, search],
   })
