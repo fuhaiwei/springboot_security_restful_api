@@ -7,7 +7,7 @@ import {
   renderId,
   renderName,
   renderRoles,
-} from '#P/profile/profile'
+} from '#P/session/view-profile'
 import useUrlState from '@ahooksjs/use-url-state'
 import { useRequest } from 'ahooks'
 import { Table } from 'antd'

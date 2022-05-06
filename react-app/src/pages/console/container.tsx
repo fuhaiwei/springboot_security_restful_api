@@ -1,26 +1,38 @@
+import { useNav } from '#A/hooks'
 import { MyCheckbox } from '#C/checkbox/Checkbox'
 import { MyHeader } from '#C/header/Header'
 import { MyPagination } from '#C/pagination/Pagination'
-import { useRequest, useSetState } from 'ahooks'
+import useUrlState from '@ahooksjs/use-url-state'
+import { useRequest } from 'ahooks'
 import { Radio, Table } from 'antd'
 import Column from 'antd/lib/table/Column'
 import dayjs from 'dayjs'
-import { useState } from 'react'
-import { allNames, allTypes, findAll, Message, Name, Options } from './service'
+import { useParams } from 'react-router-dom'
+import { allNames, allTypes, findAll, Message, Name, Search } from './service'
 
 const typeOptions = allTypes.map((e) => ({ label: e, value: e }))
 
+function fromArray(array: string[]) {
+  if (typeof array === 'string') {
+    return [array]
+  } else {
+    return array ?? []
+  }
+}
+
 export function Console() {
-  const [name, setName] = useState<Name>('SERVER_CORE')
-  const [options, setOptions] = useSetState<Options>({ types: [...allTypes] })
-  const { data, ...state } = useRequest(() => findAll(name, options), {
-    refreshDeps: [name, options],
+  const { navigate } = useNav()
+  const { name = 'SERVER_CORE' } = useParams<{ name: Name }>()
+  const [search, setSearch] = useUrlState<Search>()
+  search.types = fromArray(search.types)
+  const { data, ...state } = useRequest(() => findAll(name, search), {
+    refreshDeps: [name, search],
   })
   const msgs = data?.data
   const page = data?.page
 
   const onChange = (page: number, size: number = 20) => {
-    setOptions({ page, size })
+    setSearch({ page, size })
   }
 
   return (
@@ -29,7 +41,7 @@ export function Console() {
         state={state}
         title="Console"
         extra={
-          <Radio.Group value={name} onChange={(e) => setName(e.target.value)}>
+          <Radio.Group value={name} onChange={(e) => navigate(`/console/${e.target.value}`)}>
             {allNames.map((e) => (
               <Radio key={e} value={e}>
                 {e}
@@ -40,9 +52,9 @@ export function Console() {
         children={
           <MyCheckbox
             allSelectText="ALL"
-            value={options.types}
+            value={search.types}
             options={typeOptions}
-            onChange={(e) => setOptions({ types: e as any })}
+            onChange={(values) => setSearch({ types: values })}
           />
         }
       />

@@ -17,18 +17,18 @@ export interface Message {
   acceptOn: number
 }
 
-export interface Options {
-  types: Type[]
+export interface Search {
   search?: string
+  types?: Type[]
   page?: number
   size?: number
 }
 
-export function findAll(name: Name, options?: Options) {
+export function findAll(name: Name, search: Partial<Search>) {
   const params = new URLSearchParams()
-  if (options?.types) params.append('types', options.types.join(','))
-  if (options?.search) params.append('search', options.search)
-  if (options?.page) params.append('page', `${options.page}`)
-  if (options?.size) params.append('size', `${options.size}`)
+  if (search.search) params.append('search', search.search)
+  if (search.types) params.append('types', search.types.join(','))
+  if (search.page) params.append('page', `${search.page}`)
+  if (search.size) params.append('size', `${search.size}`)
   return fetchResult<Message[]>(`/api/messages/${name}?${params}`)
 }

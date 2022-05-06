@@ -2,7 +2,7 @@ import { useNav } from '#A/hooks'
 import { sessionQuery } from '#F/session/slice'
 import { Console } from '#P/console/container'
 import NotFound from '#P/notfound/NotFound'
-import { Session } from '#P/profile/container'
+import { Session } from '#P/session/container'
 import { Users } from '#P/users/container'
 import { BarChartOutlined, GithubOutlined, UserOutlined } from '@ant-design/icons'
 import { Layout, Menu } from 'antd'
@@ -57,7 +57,9 @@ function App() {
               <Route path="/" element={<Navigate to="/session" />} />
               <Route path="/users" element={<Users />} />
               <Route path="/session" element={<Session />} />
-              <Route path="/console" element={<Console />} />
+              <Route path="/console" element={<Console />}>
+                <Route path=":name" />
+              </Route>
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Content>
