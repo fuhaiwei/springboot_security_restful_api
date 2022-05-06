@@ -15,7 +15,7 @@ import { appDispatch } from './store'
 
 const items: ItemType[] = [
   { label: 'Users', icon: <UserOutlined />, key: '/users' },
-  { label: 'Profile', icon: <UserOutlined />, key: '/session' },
+  { label: 'Session', icon: <UserOutlined />, key: '/session' },
   { label: 'Console', icon: <BarChartOutlined />, key: '/console' },
   {
     label: 'Source',
