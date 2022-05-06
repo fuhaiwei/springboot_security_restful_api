@@ -1,12 +1,14 @@
 package com.mingzuozhibi.modules.user;
 
-import com.mingzuozhibi.commons.base.BaseController;
+import com.mingzuozhibi.commons.base.PageController;
 import com.mingzuozhibi.commons.mylog.JmsBind;
 import com.mingzuozhibi.commons.mylog.JmsEnums.Name;
 import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +20,7 @@ import static com.mingzuozhibi.support.ModifyUtils.*;
 
 @RestController
 @JmsBind(Name.SERVER_USER)
-public class UserController extends BaseController {
+public class UserController extends PageController {
 
     @Autowired
     private UserRepository userRepository;
@@ -29,8 +31,12 @@ public class UserController extends BaseController {
     @Transactional
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(value = "/api/users", produces = MEDIA_TYPE)
-    public String findAll() {
-        return dataResult(userRepository.findAll());
+    public String findAll(
+        @RequestParam(defaultValue = "1") int page,
+        @RequestParam(defaultValue = "20") int size
+    ) {
+        PageRequest pageRequest = PageRequest.of(page - 1, size);
+        return pageResult(userRepository.findAll(pageRequest));
     }
 
     @Transactional
@@ -42,6 +48,20 @@ public class UserController extends BaseController {
             return paramNotExists("用户ID");
         }
         return dataResult(byId.get());
+    }
+
+    @Transactional
+    @GetMapping(value = "/api/users/current", produces = MEDIA_TYPE)
+    public String findCurrent() {
+        Optional<Authentication> optional = SessionUtils.getAuthentication();
+        if (optional.isPresent()) {
+            String name = optional.get().getName();
+            Optional<User> byUsername = userRepository.findByUsername(name);
+            if (byUsername.isPresent()) {
+                return dataResult(byUsername.get());
+            }
+        }
+        return errorResult("login status is abnormal");
     }
 
     @Setter

@@ -65,6 +65,4 @@ export const sessionSlice = createSlice({
   },
 })
 
-export const {} = sessionSlice.actions
-
 export default sessionSlice.reducer

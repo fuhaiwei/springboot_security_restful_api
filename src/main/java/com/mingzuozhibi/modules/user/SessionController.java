@@ -110,7 +110,7 @@ public class SessionController extends BaseController {
             setSessionTokenToHeader(remember.getToken());
         }
         setAuthentication(buildUserAuthentication(user));
-        user.setLastLoggedIn(Instant.now());
+        user.setAccessOn(Instant.now());
     }
 
 }

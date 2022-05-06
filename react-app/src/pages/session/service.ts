@@ -1,6 +1,5 @@
 import { fetchResult } from '#H/UseResult'
-
-export interface IUser {}
+import { IUser } from '#P/users/service'
 
 interface RegisterForm {
   username: string
@@ -14,4 +13,8 @@ export function postRegister(form: RegisterForm) {
     successText: 'Register Success',
     failureName: 'Register Failure',
   }).then((result) => result.data)
+}
+
+export function findCurrnet() {
+  return fetchResult<IUser>('/api/users/current').then((result) => result.data)
 }

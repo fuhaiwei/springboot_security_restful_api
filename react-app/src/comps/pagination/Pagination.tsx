@@ -3,7 +3,7 @@ import { Pagination } from 'antd'
 import { useCallback } from 'react'
 
 interface Props {
-  page: Page
+  page?: Page
   onChange: (page: number, size?: number) => void
 }
 
@@ -12,6 +12,7 @@ export function MyPagination({ page, onChange }: Props) {
     (page: number, size?: number) => onChange(page, size),
     [onChange]
   )
+  if (page === undefined) return null
   return (
     <Pagination
       showSizeChanger

@@ -22,13 +22,13 @@ public class SecurityHandler implements AuthenticationEntryPoint, AccessDeniedHa
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request, response));
-        responseText(response, errorResult("你必须登入才能访问这些资源"));
+        responseText(response, errorResult("You must be logged in to access these resources"));
     }
 
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException {
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(request, response));
-        responseText(response, errorResult("你的权限不足以访问这些资源"));
+        responseText(response, errorResult("You do not have sufficient permissions to access these resources"));
     }
 
     public static void responseText(HttpServletResponse response, String content) throws IOException {

@@ -23,7 +23,6 @@ export function Console() {
     setOptions({ page, size })
   }
 
-  console.log(`render Console: loading=${state.loading} data=${data !== undefined}`)
   return (
     <div className="Console">
       <MyHeader

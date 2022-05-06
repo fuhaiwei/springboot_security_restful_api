@@ -21,7 +21,7 @@ public class User extends BaseEntity implements Serializable {
         this.username = username;
         this.password = password;
         this.enabled = enabled;
-        this.registerDate = Instant.now();
+        this.createOn = Instant.now();
         this.roles.add("ROLE_BASIC");
     }
 
@@ -40,10 +40,10 @@ public class User extends BaseEntity implements Serializable {
     private Set<String> roles = new HashSet<>();
 
     @Column(nullable = false)
-    private Instant registerDate;
+    private Instant createOn;
 
     @Column
-    private Instant lastLoggedIn;
+    private Instant accessOn;
 
     @Override
     public boolean equals(Object o) {

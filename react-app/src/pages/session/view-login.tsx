@@ -1,7 +1,7 @@
-import { dispatch } from '#A/store'
+import { appDispatch } from '#A/store'
 import { encodePassword } from '#A/utils'
 import { sessionLogin } from '#F/session/slice'
-import { Button, Form, Input, Modal, Space } from 'antd'
+import { Button, Card, Form, Input, Modal, Space } from 'antd'
 import { useState } from 'react'
 import { postRegister } from './service'
 
@@ -12,7 +12,7 @@ export function Login() {
     const encode = encodePassword(values.username, values.password)
     const form = { ...values, password: encode }
     if (onLogin) {
-      dispatch(sessionLogin(form))
+      appDispatch(sessionLogin(form))
     } else {
       postRegister(form)
     }
@@ -23,7 +23,7 @@ export function Login() {
   }
 
   return (
-    <div className="Login">
+    <Card title={onLogin ? 'Login' : 'Register'} style={{ width: 320 }}>
       <Form
         name="basic"
         labelCol={{ span: 8 }}
@@ -38,7 +38,7 @@ export function Login() {
           name="username"
           rules={[{ required: true, message: 'Please input your username!' }]}
         >
-          <Input />
+          <Input autoComplete="username" />
         </Form.Item>
 
         <Form.Item
@@ -46,7 +46,7 @@ export function Login() {
           name="password"
           rules={[{ required: true, message: 'Please input your password!' }]}
         >
-          <Input.Password />
+          <Input.Password autoComplete="current-password" />
         </Form.Item>
 
         <Form.Item wrapperCol={{ span: 16 }}>
@@ -65,6 +65,6 @@ export function Login() {
           </Space>
         </Form.Item>
       </Form>
-    </div>
+    </Card>
   )
 }
