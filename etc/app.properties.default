@@ -1,0 +1,4 @@
+# environment configuration
+
+security.password=admin
+activemq.password=admin

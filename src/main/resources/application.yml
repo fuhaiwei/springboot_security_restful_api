@@ -1,11 +1,29 @@
 server:
   port: 8080
 spring:
-  datasource:
-    url: jdbc:h2:mem:test
-    username: root
-    password: 123456
-    driver-class-name: org.h2.Driver
+  application:
+    name: "@pom.artifactId@"
+  config:
+    import: 'file:etc/app.properties'
   jpa:
     hibernate:
       ddl-auto: update
+    open-in-view: true
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+  jpa:
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  activemq:
+    broker-url: tcp://localhost:61616
+    password: ${activemq.password:admin}
+    user: admin

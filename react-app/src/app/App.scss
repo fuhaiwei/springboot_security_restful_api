@@ -1,0 +1,15 @@
+@import '~antd/dist/antd.css';
+
+.App {
+  main.ant-layout-content {
+    margin: 8px 0;
+    padding: 0 8px;
+    padding-bottom: 8px;
+
+    @media screen and (max-width: 600px) {
+      margin: 4px 0;
+      padding: 0 4px;
+      padding-bottom: 4px;
+    }
+  }
+}

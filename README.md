@@ -2,21 +2,23 @@
 SpringBoot + SpringSecurity + RESTful API --- Maven Project Demo
 
 INSTALL:
-```bash
+```shell
 $ git clone https://github.com/fuhaiwei/springboot_security_restful_api.git
+$ cd springboot_security_restful_api/etc
+$ cp app.properties.default app.properties
 ```
 
 RUN SERVER:
-```bash
+```shell
 $ cd springboot_security_restful_api
 $ mvn clean compile spring-boot:run
 ```
 
 RUN UI:
-```bash
-$ cd react-app
-$ yarn
-$ yarn start
+```shell
+$ cd springboot_security_restful_api/react-app
+$ npm install
+$ npm start
 ```
 
 Open the following page: http://localhost:3000
